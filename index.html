@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>나의 사역 MBTI 테스트</title>
+    <style>
+        /* [디자인 가이드: 청년부의 활기참을 담은 스타일] */
+        :root {
+            --primary-color: #5D9CEC;
+            /* 밝은 블루 */
+            --secondary-color: #AC92EC;
+            /* 라벤더 */
+            --accent-color: #FFCE54;
+            /* 옐로우 */
+            --bg-color: #F5F7FA;
+            --text-color: #434A54;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* 모바일 컨테이너 */
+        .container {
+            width: 100%;
+            max-width: 450px;
+            background-color: var(--white);
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 각 섹션 공통 스타일 */
+        section {
+            display: none;
+            /* 기본 숨김 */
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            height: 100vh;
+            box-sizing: border-box;
+            text-align: center;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        section.active {
+            display: flex;
+        }
+
+        /* 타이포그래피 */
+        h1 {
+            font-size: 28px;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 22px;
+            margin-bottom: 20px;
+            word-break: keep-all;
+            line-height: 1.4;
+        }
+
+        h3 {
+            font-size: 24px;
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #656D78;
+            margin-bottom: 20px;
+            word-break: keep-all;
+        }
+
+        .desc-box {
+            background: #f0f4f8;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            text-align: left;
+        }
+
+        /* 버튼 스타일 */
+        .btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 30px;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 15px;
+            transition: transform 0.1s, background-color 0.2s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-outline {
+            background-color: white;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-answer {
+            background-color: var(--white);
+            border: 1px solid #ddd;
+            color: var(--text-color);
+            font-size: 16px;
+            padding: 20px;
+            margin-bottom: 10px;
+            border-radius: 15px;
+        }
+
+        .btn-answer:hover {
+            background-color: #f9f9f9;
+            border-color: var(--primary-color);
+        }
+
+        /* 프로그레스 바 */
+        .progress-container {
+            width: 100%;
+            height: 6px;
+            background-color: #eee;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: var(--primary-color);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* 이미지/일러스트 영역 (플레이스홀더) */
+        .img-box {
+            width: 100%;
+            height: 200px;
+            background-color: #eee;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: #ccc;
+        }
+
+        /* 애니메이션 */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 로딩 애니메이션 */
+        .loader {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid var(--primary-color);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <section id="intro" class="active">
+            <div class="img-box">
+                <img src="bokjiyouth.jpg" width = "100%"">
+            </div>
+            <h1>나의 사역 MBTI는?</h1>
+            <p>하나님이 주신 나의 달란트,<br>어떤 팀에서 가장 빛날까요?</p>
+            <p style="font-size: 14px; color: #888;">#복지교회청년부 #1인1사역</p>
+            <button class="btn" onclick="startTest()">테스트 시작하기</button>
+        </section>
+
+        <section id="qna">
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <div class="img-box" id="qImage">🤔</div>
+            <h2 id="qTitle">질문 내용이 여기에 들어갑니다.</h2>
+            <button class="btn btn-answer" onclick="nextQuestion('A')">답변 A</button>
+            <button class="btn btn-answer" onclick="nextQuestion('B')">답변 B</button>
+        </section>
+
+        <section id="loading">
+            <div class="loader"></div>
+            <h2>당신의 영적 달란트를<br>분석하고 있습니다...</h2>
+        </section>
+
+        <section id="result">
+            <h3 id="resultTitle">결과 타이틀</h3>
+            <div class="img-box" id="resultImg">🎁</div>
+
+            <div class="desc-box">
+                <strong>💡 이런 점이 특별해요</strong>
+                <p id="resultDesc">성향 설명이 들어갑니다.</p>
+            </div>
+
+            <div class="desc-box" style="background-color: #fff8e1;">
+                <strong>🙌 추천 사역팀: <span id="teamName"></span></strong>
+                <p id="teamRole" style="margin-top:5px; margin-bottom:5px; font-size:13px;"></p>
+                <hr style="border: 0; border-top: 1px dashed #ccc; margin: 10px 0;">
+                <p style="font-weight: bold; color: var(--primary-color);">팀장: <span id="teamLeader"></span></p>
+            </div>
+
+            <button class="btn" onclick="copyLink()">🔗 결과 공유하기</button>
+            <button class="btn btn-outline" onclick="contactLeader()">📞 사역 신청하러 가기</button>
+            <button class="btn" style="background-color: #ddd; color:#555; margin-top:10px;"
+                onclick="location.reload()">테스트 다시하기</button>
+        </section>
+    </div>
+
+    <script>
+        // [데이터 설정: 12개 문항]
+        // logicType: 1 (1부: 에너지/외향), 2 (2부: 감성/꼼꼼)
+        const qnaList = [
+            // 1부 (1~6번): 외향(A) vs 내향(B) or 에너지 방향
+            { q: "새로운 친구가 청년부에 처음 왔을 때 나의 행동은?", a: "먼저 다가가 환하게 웃으며 인사를 건넨다.", b: "새 친구가 불편하지 않게 멀리서 필요한 것(주보, 자리 등)을 챙겨준다.", type: 1 },
+            { q: "예배를 준비할 때 내가 더 선호하는 자리는?", a: "사람들의 시선이 머무는 앞자리나 무대 위.", b: "보이지 않는 곳에서 묵묵히 전체적인 흐름을 돕는 자리.", type: 1 },
+            { q: "행사를 마친 후, 내가 가장 뿌듯함을 느끼는 순간은?", a: "많은 청년과 대화하며 즐거운 시간을 보냈을 때.", b: "행사가 큰 실수 없이 매끄럽게 잘 진행되었을 때.", type: 1 },
+            { q: "사역을 할 때 나의 소통 방식은?", a: "사람들과 직접 부딪히고 소통하며 에너지를 발산하는 편이다.", b: "주어진 역할에 집중하며 조용히 내 할 일을 완수하는 편이다.", type: 1 },
+            { q: "예배 직전, 내가 더 자연스럽게 하고 있는 행동은?", a: "들어오는 청년들의 표정을 살피며 반갑게 인사를 나누고 분위기를 띄운다.", b: "오늘 필요한 물품이 제자리에 있는지, 무대나 의자 배치는 깔끔한지 마지막으로 점검한다.", type: 1 },
+            { q: "청년부 단톡방에 공지가 올라왔을 때 나는?", a: "'좋아요!'','감사합니다!'등 적극적으로 리액션하며 분위기를 띄운다.", b: "내용을 꼼꼼히 읽고 내가 해야 할 일을 메모하거나 체크한다.", type: 1 },
+
+            // 2부 (7~12번): 예술/감성(A) vs 꼼꼼/관리(B)
+            { q: "주보를 볼 때 내가 먼저 눈에 들어오는 것은?", a: "색감, 디자인, 감성적인 문구.", b: "오타 여부, 가독성, 전달하는 정보의 정확성.", type: 2 },
+            { q: "내가 평소에 더 즐겨 하는 활동은?", a: "악기를 연주하거나 목소리로 노래 부르기, 또는 무언가 꾸미기.", b: "전자기기를 다루거나 문서 작성하기, 혹은 물건들 정리하기.", type: 2 },
+            { q: "예배를 준비하며 드리는 나의 기도는 어떤 스타일에 가깝나요?", a: "'주님, 우리의 마음이 하나 되어 기쁘게 예배하게 하소서.'", b: "'주님, 모든 순서가 순조롭고 온전히 진행되게 하소서.'", type: 2 },
+            { q: "공간에 변화를 주고 싶을 때 나의 아이디어는?", a: "절기에 맞는 장식이나 예쁜 소품으로 분위기를 바꿔보자.", b: "자막 가독성을 높이고 의자 배치를 더 효율적으로 바꿔보자.", type: 2 },
+            { q: "평소 CCM(찬양)을 들을 때 나는 주로 무엇을 하나요?", a: "멜로디를 따라 부르거나 연주되는 악기 소리에 집중하며 듣는다.", b: "가사의 메시지를 묵상하거나, 예배 때 이 곡을 어떻게 활용할지 생각한다.", type: 2 },
+            { q: "주일 예배를 위해 미스바의 문을 열고 들어섰을 때, 나를 기분 좋게 만드는 '준비된 예배'의 모습은?", a: "미스바의 분위기를 차분하게 만드는 조명과 무대 위의 배경 현수막", b: "줄이 딱 맞춰진 빈 의자들과 화면에 띄워진 깔끔하고 가독성 좋은 자막", type: 2 }
+        ];
+
+        // [결과 데이터]
+        // 1부 A많음(High Energy) + 2부 A많음(Artistic) = 찬양팀
+        // 1부 A많음(High Energy) + 2부 B많음(Admin/Support) = 홍보&환영팀
+        // 1부 B많음(Calm) + 2부 A많음(Artistic) = 미디어팀
+        // 1부 B많음(Calm) + 2부 B많음(Admin/Support) = 예배팀
+        const resultList = {
+            "Artist": {
+                title: "에너지 넘치는 예술가 🎤",
+                desc: "당신은 넘치는 흥과 끼를 주체할 수 없는 분위기 메이커! 무대 위에서 하나님을 높일 때 가장 빛나는 사람입니다.",
+                team: "찬양팀 (싱어, 세션)",
+                role: "예배의 문을 여는 찬양 인도 및 연주",
+                leader: "송민선"
+            },
+            "Ambassador": {
+                title: "친절하고 스마트한 홍보환영 😊",
+                desc: "처음 본 사람과도 금방 친해지는 친화력과 꼼꼼함을 겸비하셨군요! 새 가족을 맞이하고 소식을 알리는 데 탁월합니다.",
+                team: "홍보 & 환영팀",
+                role: "새가족 환영, 주보 제작, SNS 관리",
+                leader: "구채린"
+            },
+            "MoodMaker": {
+                title: "섬세한 감성의 분위기 메이커 🎥",
+                desc: "조용하지만 예리한 감각의 소유자! 뒤에서 묵묵히 전체적인 분위기를 조율하고 아름답게 만드는 능력이 있습니다.",
+                team: "미디어팀 (방송, 자막, 디자인)",
+                role: "예배 자막 송출, 영상 촬영 및 편집",
+                leader: "강지은" 
+            },
+            "Guardian": {
+                title: "든든하고 꼼꼼한 예배 수호자 🛡️",
+                desc: "보이지 않는 곳에서 예배가 온전히 드려지도록 돕는 든든한 기둥! 당신의 섬세한 손길 덕분에 모두가 평안히 예배합니다.",
+                team: "예배팀 (예배지원, 세팅)",
+                role: "예배실 세팅, 기도, 질서 유지",
+                leader: "최세화"
+            }
+        };
+
+        // 상태 변수
+        let currentStep = 0;
+        let scorePart1 = 0; // 1부 A 선택 횟수
+        let scorePart2 = 0; // 2부 A 선택 횟수
+
+        const introSection = document.getElementById('intro');
+        const qnaSection = document.getElementById('qna');
+        const loadingSection = document.getElementById('loading');
+        const resultSection = document.getElementById('result');
+
+        const qTitle = document.getElementById('qTitle');
+        const progressBar = document.getElementById('progressBar');
+
+        function startTest() {
+            introSection.classList.remove('active');
+            qnaSection.classList.add('active');
+            setQuestion();
+        }
+
+        function setQuestion() {
+            let q = qnaList[currentStep];
+            qTitle.innerText = q.q;
+
+            // 프로그레스 바 업데이트
+            let percent = (currentStep / qnaList.length) * 100;
+            progressBar.style.width = percent + '%';
+
+            // 답변 버튼 텍스트 설정 (버튼 엘리먼트를 찾아서 변경)
+            const btns = document.querySelectorAll('.btn-answer');
+            btns[0].innerText = q.a;
+            btns[1].innerText = q.b;
+        }
+
+        function nextQuestion(answer) {
+            // 점수 계산
+            if (answer === 'A') {
+                if (qnaList[currentStep].type === 1) scorePart1++;
+                else scorePart2++;
+            }
+
+            currentStep++;
+
+            if (currentStep < qnaList.length) {
+                setQuestion();
+            } else {
+                showLoading();
+            }
+        }
+
+        function showLoading() {
+            qnaSection.classList.remove('active');
+            loadingSection.classList.add('active');
+
+            setTimeout(() => {
+                loadingSection.classList.remove('active');
+                showResult();
+            }, 2000); // 2초 대기
+        }
+
+        function showResult() {
+            resultSection.classList.add('active');
+
+            // 결과 도출 로직
+            // Part 1: 3점 이상이면 A(Active), 미만이면 B(Calm) - 6문항 중 과반
+            // Part 2: 3점 이상이면 A(Art), 미만이면 B(Admin) - 6문항 중 과반
+            let type1 = scorePart1 >= 3 ? "A" : "B";
+            let type2 = scorePart2 >= 3 ? "A" : "B";
+
+            let finalType = "";
+
+            if (type1 === "A" && type2 === "A") finalType = "Artist";
+            else if (type1 === "A" && type2 === "B") finalType = "Ambassador";
+            else if (type1 === "B" && type2 === "A") finalType = "MoodMaker";
+            else finalType = "Guardian";
+
+            // 결과 화면 바인딩
+            let data = resultList[finalType];
+            document.getElementById('resultTitle').innerText = data.title;
+            document.getElementById('resultDesc').innerText = data.desc;
+            document.getElementById('teamName').innerText = data.team;
+            document.getElementById('teamRole').innerText = data.role;
+            document.getElementById('teamLeader').innerText = data.leader;
+        }
+
+        function copyLink() {
+            // 실제 배포 시 현재 URL 복사
+            const dummyUrl = "https://worship-mbti.com"; // 예시 URL
+            navigator.clipboard.writeText(dummyUrl).then(() => {
+                alert("당신의 사역 mbti를 마음껏 공유하세요~");
+            });
+        }
+
+        function contactLeader() {
+            // 카카오톡 오픈채팅 링크나 구글폼 등으로 연결
+            alert("팀장님에게 사역 신청 ㄱㄱ");
+            // location.href = "https://open.kakao.com/..." 
+        }
+    </script>
+</body>
+
+</html>
